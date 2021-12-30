@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: spring-user-stream
+  profiles:
+    active: test
+
+

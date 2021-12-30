@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: seata-order-service
+  profiles:
+    active: test
+
+

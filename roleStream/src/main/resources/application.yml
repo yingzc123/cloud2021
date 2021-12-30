@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: spring-role-stream
+  profiles:
+    active: test
+
+

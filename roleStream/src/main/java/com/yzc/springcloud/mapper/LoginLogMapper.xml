@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yzc.springcloud.dao.LoginLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yzc.springcloud.entity.LoginLog">
+        <id column="log_id" property="logId" />
+        <result column="user_num" property="userNum" />
+        <result column="log_time" property="logTime" />
+        <result column="ip" property="ip" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        log_id, user_num, log_time, ip
+    </sql>
+
+</mapper>

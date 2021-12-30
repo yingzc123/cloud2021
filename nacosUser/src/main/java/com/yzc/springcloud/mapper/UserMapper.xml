@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yzc.springcloud.dao.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yzc.springcloud.entity.User">
+        <id column="user_id" property="userId" />
+        <result column="user_name" property="userName" />
+        <result column="age" property="age" />
+        <result column="sex" property="sex" />
+        <result column="address" property="address" />
+        <result column="email" property="email" />
+        <result column="login_pwd" property="loginPwd" />
+        <result column="pay_pwd" property="payPwd" />
+        <result column="cal" property="cal" />
+        <result column="balance" property="balance" />
+        <result column="role_id" property="roleId" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        user_id, user_name, age, sex, address, email, login_pwd, pay_pwd, cal, balance, role_id, create_time
+    </sql>
+
+</mapper>

@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: branch
+  main:
+    # 一个实体类对应两张表，覆盖
+    allow-bean-definition-overriding: true
+  profiles:
+    active: test
+
+

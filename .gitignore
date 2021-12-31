@@ -3,7 +3,8 @@ userStream/target/
 *.iml
 *rebel.xml
 *.diff
-commonsUtils/target/
+commons/commonsUtils/target/
+commons/systemUtils/target/
 esService/target/
 eurekaOne/target/
 eurekaTwo/target/

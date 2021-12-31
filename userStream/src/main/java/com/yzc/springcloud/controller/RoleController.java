@@ -40,7 +40,7 @@ public class RoleController {
 
     @GetMapping("/updateObject")
     public ResultObject updateObject(){
-        roleService.mainModer();
+        roleService.mainModer(); //
         return  new ResultObject(200,"成功");
     }
 

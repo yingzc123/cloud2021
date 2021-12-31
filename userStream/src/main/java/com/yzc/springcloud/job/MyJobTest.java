@@ -13,14 +13,15 @@ public class MyJobTest extends IJobHandler {
 
     @XxlJob(value = "myJobTest")
     public ReturnT<String> execute(String s) throws Exception {
-        int [][] what = new int[11][11];
+/*        int [][] what = new int[11][11];
         what[1][2]=3;
         what[2][2]=3;
   for(int[] row:what) {
       for(int item:row) {
           System.out.println(item);
       }
-  }
-        return null;
+  }*/
+        System.out.println("我是你的爸爸");
+        return ReturnT.SUCCESS;
     }
 }

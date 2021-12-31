@@ -12,7 +12,11 @@ import org.springframework.stereotype.Component;
 public class MessageProducer01 {
     @Autowired
     private MySource01 mySource01;
+
     public void send(String msg){
         mySource01.defaultMsg().send(MessageBuilder.withPayload(msg).build());
+        mySource01.toMsg().send(MessageBuilder.withPayload(msg).build());
     };
+
+
 }

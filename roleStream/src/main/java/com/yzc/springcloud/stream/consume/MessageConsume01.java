@@ -18,4 +18,14 @@ public class MessageConsume01 {
     public void receive(String msg) {
         System.out.println("msg:"+msg);
     }
+
+
+
+    /**
+     * 接收消息
+     */
+    @StreamListener(MySink01.TO_MSG)
+    public void toMsg(String msg) {
+        System.out.println("TO_MSG:"+msg);
+    }
 }

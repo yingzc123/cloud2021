@@ -38,6 +38,13 @@ public class RoleController {
     @Autowired
     private RedisUtil redisUtil;
 
+    @GetMapping("/updateObject")
+    public ResultObject updateObject(){
+        roleService.mainModer();
+        return  new ResultObject(200,"成功");
+    }
+
+
     @GetMapping("/list")
     public ResultObject getList(){
         Page<RoleVO.RoleReturnVO> list = roleService.getList();

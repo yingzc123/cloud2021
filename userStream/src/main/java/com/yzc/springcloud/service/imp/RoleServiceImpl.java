@@ -10,6 +10,8 @@ import com.yzc.springcloud.entity.vo.RoleVO;
 import com.yzc.springcloud.service.RoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yzc.springcloud.utils.BeanKit;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
  * @since 2021-12-24
  */
 @Service
+@Slf4j
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
 
 
@@ -33,14 +36,41 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         return voPage;
     }
 
+    @Override
+    public void updateRole(Role role) {
+        BeanUtils.copyProperties(Role.builder().roleId(888).roleName("帅哥").state("2").build(),role);
+    }
+
+    @Override
+    public void updateJson(JSONObject jsonObject) {
+        JSONObject returnObject=null;
+        String str = "[{\"in_stock_sn\":\"RK2112270019\",\"in_stock_time\":\"2021-12-27 19:41:22\",\"stockin_qty\":101,\"pur_sn\":\"RD798743\"}]";
+        JSONArray jsonArray = JSONObject.parseArray(str);
+        returnObject = jsonArray.getJSONObject(0);
+        jsonObject.putAll(returnObject);
+    }
+
+    @Override
+    public void mainModer() {
+        Role role = new Role();
+        JSONObject jsonObject = new JSONObject();
+        updateRole(role);
+        updateJson(jsonObject);
+        log.info("role:{}",JSONObject.toJSON(role));
+        log.info("jsonObject:{}",jsonObject);
+    }
+
     public static void main(String[] args) {
-        String str="[{\"in_stock_sn\":\"RK2112270019\",\"in_stock_time\":\"2021-12-27 19:41:22\",\"stockin_qty\":101,\"pur_sn\":\"RD798743\"}]";
+
+
+       /* String str="[{\"in_stock_sn\":\"RK2112270019\",\"in_stock_time\":\"2021-12-27 19:41:22\",\"stockin_qty\":101,\"pur_sn\":\"RD798743\"}]";
         JSONArray jsonArray = JSONObject.parseArray(str);
         // 遍历jsons数组对象，
         for (int i = 0; i < jsonArray.size(); i++) {
-            Object object = jsonArray.get(i);
-            System.out.println(object.toString());
+            jsonArray.getJSONObject(i).put("log_id",1);
         }
+
+        log.info("data:{}",jsonArray);*/
 
     }
 

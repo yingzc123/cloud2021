@@ -21,5 +21,6 @@ public interface OrderService extends IService<Order> {
     void payOrder(OrderDto.PayOrderUser dto) throws Exception;
 
     String returnOrderNo();
+    void delOrder(String orderNo);
 
 }

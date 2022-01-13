@@ -10,8 +10,12 @@ import com.yzc.springcloud.entity.vo.RoleVO;
 import com.yzc.springcloud.service.RoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yzc.springcloud.utils.BeanKit;
+import com.yzc.springcloud.utils.RedisUtil;
+import com.yzc.springcloud.utils.exceptionhandler.DiyException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,7 +29,21 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
+    @Autowired
+    private RedisUtil redisUtil;
 
+
+    @Override
+    public Object testRedisUtils(String key) {
+        if(StringUtils.isEmpty(key)) {
+          throw   new DiyException(500,"key不可以为null");
+        }
+        boolean isTrue = redisUtil.hasKey(key);
+        if(!isTrue) {
+            throw   new DiyException(500,"key不存在");
+        }
+        return redisUtil.get(key);
+    }
 
     @Override
     public Page<RoleVO.RoleReturnVO> getList() {
@@ -58,20 +76,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         updateJson(jsonObject);
         log.info("role:{}",JSONObject.toJSON(role));
         log.info("jsonObject:{}",jsonObject);
-    }
-
-    public static void main(String[] args) {
-
-
-       /* String str="[{\"in_stock_sn\":\"RK2112270019\",\"in_stock_time\":\"2021-12-27 19:41:22\",\"stockin_qty\":101,\"pur_sn\":\"RD798743\"}]";
-        JSONArray jsonArray = JSONObject.parseArray(str);
-        // 遍历jsons数组对象，
-        for (int i = 0; i < jsonArray.size(); i++) {
-            jsonArray.getJSONObject(i).put("log_id",1);
-        }
-
-        log.info("data:{}",jsonArray);*/
-
     }
 
 }

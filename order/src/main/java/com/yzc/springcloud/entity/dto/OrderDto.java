@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 @Data
 public class OrderDto {
 
+
     @Data
     public static class PayOrderUser{
         //用户id
@@ -25,10 +26,10 @@ public class OrderDto {
         @NotEmpty(message = "用户ID不能为空")
         private String userId;
         //商品Id
-        @NotNull(message = "订单号不能为空")
+        @NotNull(message = "商品id不能为空")
         private Integer goodsId;
         //商品名称
-        @NotEmpty(message = "订单号不能为空")
+        @NotEmpty(message = "商品名称不可以为空")
         private String goodsName;
 
     }

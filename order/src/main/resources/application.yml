@@ -18,7 +18,7 @@ spring:
     username: sb
     password: Hahahaha!
   redis:
-    host: yzcorxh.top
+    host: 1.117.54.209
     port: 6379
     password: yzc1998
     timeout: 20000
@@ -29,7 +29,7 @@ spring:
         max-idle: 8
         max-wait: -1
   rabbitmq:
-    host: yzcorxh.top
+    host: 1.117.54.209
     port: 5672
     username: guest
     password: guest

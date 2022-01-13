@@ -11,12 +11,13 @@
         <result column="price" property="price" />
         <result column="user_id" property="userId" />
         <result column="is_pay" property="isPay" />
+        <result column="is_del" property="isDel" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id,order_no,
-        goods_id, goods_name, price,user_id,is_pay
+        goods_id, goods_name, price,user_id,is_pay,is_del
     </sql>
 
 </mapper>

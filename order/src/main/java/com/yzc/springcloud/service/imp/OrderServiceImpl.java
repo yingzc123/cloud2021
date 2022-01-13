@@ -3,6 +3,7 @@ package com.yzc.springcloud.service.imp;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.yzc.springcloud.entity.Order;
 import com.yzc.springcloud.dao.OrderMapper;
 import com.yzc.springcloud.entity.dto.OrderDto;
@@ -16,6 +17,7 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 
@@ -47,6 +49,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         System.out.println(order.getOrderNo());
         log.info(JSONUtil.toJsonStr(order));
         save(order);
+        rabbitTemplate.convertAndSend("per_queue_ttl_exchange", "delay_queue_per_queue_ttl", order.getOrderNo());
         return order;
     }
 
@@ -89,6 +92,23 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                 return orderOn;
             }
         }
+    }
+
+    /**
+     * 模拟用户下单在指定时间内未支付则删除订单
+     */
+    @Override
+    public void delOrder(String orderNo) {
+        Order one = getOne(new QueryWrapper<Order>().eq("order_no", orderNo).eq("is_del", 0));
+        if(null == one) {
+            log.error(orderNo+":订单不存在");
+            return;
+        }
+        if(1 == one.getIsPay()) {
+            log.error(orderNo+":订单已支付");
+            return;
+        }
+        update(new UpdateWrapper<Order>().set("is_del",1).eq("order_no",orderNo));
     }
 
 

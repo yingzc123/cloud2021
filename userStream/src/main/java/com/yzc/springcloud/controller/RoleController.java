@@ -38,6 +38,13 @@ public class RoleController {
     @Autowired
     private RedisUtil redisUtil;
 
+    @GetMapping("/getRedisObject")
+    public ResultObject getRedisObject(String key){
+        Object o = roleService.testRedisUtils(key);
+        return  new ResultObject(200,o);
+    }
+
+
     @GetMapping("/updateObject")
     public ResultObject updateObject(){
         roleService.mainModer(); //

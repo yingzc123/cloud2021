@@ -39,5 +39,7 @@ public class Order implements Serializable {
 
     private Integer isPay;
 
+    private Integer isDel;
+
 
 }

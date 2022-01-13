@@ -15,6 +15,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
  * @since 2021-12-24
  */
 public interface RoleService extends IService<Role> {
+
+    Object testRedisUtils(String key);
     Page<RoleVO.RoleReturnVO> getList();
 
     void updateRole(Role role);

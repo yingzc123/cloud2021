@@ -1,9 +1,6 @@
 package com.yzc.springcloud.config.mqconfig;
 
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.FanoutExchange;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,5 +17,8 @@ public class RabbitConfig {
         return BindingBuilder.bind(orderSucceed).to(orderSucceedExchange);
     }
 
+/*******************************************************************************************************************************/
+/*******************************************************************************************************************************/
+/****延时队列*****/
 
 }

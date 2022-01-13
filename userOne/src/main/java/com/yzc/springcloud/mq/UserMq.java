@@ -1,7 +1,7 @@
 package com.yzc.springcloud.mq;
 
 
-
+import org.springframework.amqp.core.Message;
 import com.yzc.springcloud.entity.mqVo.UserPay;
 import com.yzc.springcloud.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,5 +28,6 @@ public class UserMq {
         log.info("支付成功消费队列:{}", userPay);
         userService.userSucceedOrder(userPay);
     }
+
 
 }

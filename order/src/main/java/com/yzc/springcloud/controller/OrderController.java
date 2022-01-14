@@ -77,7 +77,7 @@ public class OrderController {
      * 生成订单
      */
     @PostMapping ("/createOrder")
-    public ResultObject createOrder(@RequestBody  @Valid OrderDto.CreateOrderUser dto) {
+    public ResultObject createOrder(@RequestBody  @Valid OrderDto.CreateOrderUser dto) throws Exception{
         try {
             Order order = orderService.userCreateOrder(dto);
             return new ResultObject(200,"下单成功",order);

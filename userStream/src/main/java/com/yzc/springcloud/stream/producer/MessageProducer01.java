@@ -14,8 +14,8 @@ public class MessageProducer01 {
     private MySource01 mySource01;
 
     public void send(String msg){
-        mySource01.defaultMsg().send(MessageBuilder.withPayload(msg).build());
-        mySource01.toMsg().send(MessageBuilder.withPayload(msg).setHeader("x-delay",6000).build());
+        mySource01.defaultMsg().send(MessageBuilder.withPayload("每天笑哈哈").build());
+        mySource01.toMsg().send(MessageBuilder.withPayload("月入2800").setHeader("x-delay",6000).build());
     };
 
 

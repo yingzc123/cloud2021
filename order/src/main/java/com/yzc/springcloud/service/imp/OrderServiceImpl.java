@@ -47,8 +47,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         }
         Order order = Order.builder().orderNo(returnOrderNo()).userId(dto.getUserId()).price(new BigDecimal(100)).goodsId
                 (dto.getGoodsId()).goodsName(dto.getGoodsName()).build();
-        System.out.println(order.getOrderNo());
-        log.info(JSONUtil.toJsonStr(order));
+        log.info("用户下单:{}",JSONUtil.toJsonStr(order));
         save(order);
         rabbitTemplate.convertAndSend("per_queue_ttl_exchange", "delay_queue_per_queue_ttl", order.getOrderNo());
         return order;

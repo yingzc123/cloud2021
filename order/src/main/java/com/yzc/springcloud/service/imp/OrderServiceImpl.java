@@ -40,10 +40,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     @Override
     @Transactional
-    public Order userCreateOrder(OrderDto.CreateOrderUser dto) throws Exception{
+    public Order userCreateOrder(OrderDto.CreateOrderUser dto){
         User user = userFeign.getUserId(dto.getUserId());
         if(null == user) {
-            throw new DiyException(500,"用户不存在");
+            throw new DiyException(500,"我是你爸爸");
         }
         Order order = Order.builder().orderNo(returnOrderNo()).userId(dto.getUserId()).price(new BigDecimal(100)).goodsId
                 (dto.getGoodsId()).goodsName(dto.getGoodsName()).build();

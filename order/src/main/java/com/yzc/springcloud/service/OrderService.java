@@ -16,7 +16,7 @@ import com.yzc.springcloud.entity.dto.OrderDto;
  */
 public interface OrderService extends IService<Order> {
 
-    Order userCreateOrder(OrderDto.CreateOrderUser dto) throws Exception;
+    Order userCreateOrder(OrderDto.CreateOrderUser dto);
 
     void payOrder(OrderDto.PayOrderUser dto) throws Exception;
 

@@ -1,0 +1,16 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        #nacos服务地址
+        server-addr: 1.117.54.209:1111
+      config:
+        #nacos服务配置地址
+        server-addr: 1.117.54.209:1111
+        # 配置文件后缀名为yaml
+        file-extension: yaml
+        # 命名空间
+        namespace: 96a50e5a-b6dd-4d19-b61d-f9b012d725a5
+        # 属于那个组
+        group: DEFAULT_GROUP
+

@@ -15,7 +15,7 @@ public class MessageProducer01 {
 
     public void send(String msg){
         mySource01.defaultMsg().send(MessageBuilder.withPayload(msg).build());
-        mySource01.toMsg().send(MessageBuilder.withPayload(msg).build());
+        mySource01.toMsg().send(MessageBuilder.withPayload(msg).setHeader("x-delay",6000).build());
     };
 
 

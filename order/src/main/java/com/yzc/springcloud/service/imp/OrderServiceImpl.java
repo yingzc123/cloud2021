@@ -12,6 +12,7 @@ import com.yzc.springcloud.entity.mqVo.UserPay;
 import com.yzc.springcloud.feign.UserFeign;
 import com.yzc.springcloud.service.OrderService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yzc.springcloud.utils.exceptionhandler.DiyException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     public Order userCreateOrder(OrderDto.CreateOrderUser dto) throws Exception{
         User user = userFeign.getUserId(dto.getUserId());
         if(null == user) {
-            throw new Exception("用户不存在");
+            throw new DiyException(500,"用户不存在");
         }
         Order order = Order.builder().orderNo(returnOrderNo()).userId(dto.getUserId()).price(new BigDecimal(100)).goodsId
                 (dto.getGoodsId()).goodsName(dto.getGoodsName()).build();

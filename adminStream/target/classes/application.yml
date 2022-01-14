@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: spring-admin-stream
+  profiles:
+    active: test
+
+

@@ -19,7 +19,7 @@ public class OrderMq {
     @RabbitListener(queues = "delay_process_queue")
     public void DELAY_PROCESS_QUEUE_NAME(Message message) {
         String realMessage = new String(message.getBody());
-        log.info("延时队列:{}", realMessage);
+        log.info("延时判断订单支付未支付队列:{}", realMessage);
         orderService.delOrder(realMessage);
     }
 }

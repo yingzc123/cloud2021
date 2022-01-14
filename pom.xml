@@ -29,6 +29,7 @@
         <module>seataStorage</module>
         <module>userStream</module>
         <module>roleStream</module>
+        <module>adminStream</module>
     </modules>
     <packaging>pom</packaging>
 

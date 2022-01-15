@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author yzc
@@ -17,6 +17,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 public interface RoleService extends IService<Role> {
 
     Object testRedisUtils(String key);
+
+    void addRedisKey(String key, String value);
+
     Page<RoleVO.RoleReturnVO> getList();
 
     void updateRole(Role role);

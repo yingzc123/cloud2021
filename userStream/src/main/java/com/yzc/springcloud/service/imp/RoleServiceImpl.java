@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author yzc
@@ -35,19 +35,32 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public Object testRedisUtils(String key) {
-        if(StringUtils.isEmpty(key)) {
-          throw   new DiyException(500,"key不可以为null");
+        if (StringUtils.isEmpty(key)) {
+            throw new DiyException(500, "key不可以为null");
         }
         boolean isTrue = redisUtil.hasKey(key);
-        if(!isTrue) {
-            throw   new DiyException(500,"key不存在");
+        if (!isTrue) {
+            throw new DiyException(500, "key不存在");
         }
         return redisUtil.get(key);
     }
 
     @Override
+    public void addRedisKey(String key, String value) {
+        boolean isTrue = redisUtil.hasKey(key);
+        if (isTrue) {
+            throw new DiyException(500, "key已经存在添加失败");
+        }
+        boolean addIsTrue = redisUtil.set(key, value);
+        if (!addIsTrue) {
+            throw new DiyException(500, "未知错误添加失败");
+        }
+
+    }
+
+    @Override
     public Page<RoleVO.RoleReturnVO> getList() {
-        QueryWrapper<Role> qw=new QueryWrapper<>();
+        QueryWrapper<Role> qw = new QueryWrapper<>();
         Page<Role> page = page(new Page(1, 10), qw);
         Page<RoleVO.RoleReturnVO> voPage = new Page<>(page.getCurrent(), page.getSize());
         voPage.setRecords(BeanKit.copy(page.getRecords(), RoleVO.RoleReturnVO.class));
@@ -56,12 +69,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public void updateRole(Role role) {
-        BeanUtils.copyProperties(Role.builder().roleId(888).roleName("帅哥").state("2").build(),role);
+        BeanUtils.copyProperties(Role.builder().roleId(888).roleName("帅哥").state("2").build(), role);
     }
 
     @Override
     public void updateJson(JSONObject jsonObject) {
-        JSONObject returnObject=null;
+        JSONObject returnObject = null;
         String str = "[{\"in_stock_sn\":\"RK2112270019\",\"in_stock_time\":\"2021-12-27 19:41:22\",\"stockin_qty\":101,\"pur_sn\":\"RD798743\"}]";
         JSONArray jsonArray = JSONObject.parseArray(str);
         returnObject = jsonArray.getJSONObject(0);
@@ -74,8 +87,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         JSONObject jsonObject = new JSONObject();
         updateRole(role);
         updateJson(jsonObject);
-        log.info("role:{}",JSONObject.toJSON(role));
-        log.info("jsonObject:{}",jsonObject);
+        log.info("role:{}", JSONObject.toJSON(role));
+        log.info("jsonObject:{}", jsonObject);
     }
 
 }

@@ -48,10 +48,10 @@ public class EmailBdServiceImpl extends ServiceImpl<EmailBdMapper, EmailBd> impl
 
     @Override
     public String returnSave(String email) {
+        log.info("访问时间:{}",System.currentTimeMillis());
         RLock lock = redissonClient.getLock(email);
         try {
-            if(lock.tryLock(0,3000, TimeUnit.MILLISECONDS)){
-                Thread.sleep(100000);
+            lock.lock();
                 log.info("进来了：{}",System.currentTimeMillis()/1000);
             User user = userService.getOne(new QueryWrapper<User>().eq("email", email));
             if(null == user) {
@@ -61,11 +61,8 @@ public class EmailBdServiceImpl extends ServiceImpl<EmailBdMapper, EmailBd> impl
             if(count > 0) {
                 throw  new DiyException(500,"一个用户只能绑定一次");
             }
+            Thread.sleep(20000);
             save(EmailBd.builder().emailKey(email).isDel(0).createTime(new Date()).build());
-            Thread.sleep(2000);
-            }else {
-                throw new DiyException(500,"系统繁忙稍后再试");
-            }
         }catch (Exception e) {
             throw  new DiyException(500,JSONUtil.parseObj(e).get("msg").toString());
         }finally {

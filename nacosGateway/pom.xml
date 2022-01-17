@@ -52,7 +52,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.yzc.springcloud.NacosGateway0927</mainClass>
+                    <mainClass>com.yzc.springcloud.NaCosGateway</mainClass>
                 </configuration>
                 <executions>
                     <execution>

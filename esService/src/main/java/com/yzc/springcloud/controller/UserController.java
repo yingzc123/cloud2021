@@ -17,13 +17,6 @@ public class UserController {
     @Autowired
     private UserEsService userEsService;
 
-    @Value("${yzc.info}")
-    private String testValue;
-
-    @GetMapping("/info")
-    public ResultObject getInfo(){
-        return new ResultObject(200,"请求成功",testValue);
-    }
 
     @GetMapping
     public ResultObject getList(){

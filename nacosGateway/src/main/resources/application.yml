@@ -2,5 +2,5 @@ spring:
   application:
     name: cloud-gateway-service
   profiles:
-    active: dev
+    active: test
 

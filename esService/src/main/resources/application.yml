@@ -1,6 +1,6 @@
 spring:
   application:
-    name: cloud-es-service
+    name: spring-es-service
   profiles:
-    active: dev
+    active: test
 

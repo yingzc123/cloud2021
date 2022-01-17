@@ -7,8 +7,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-public class NacosGateway0927 {
+public class NaCosGateway {
     public static void main(String[] args) {
-        SpringApplication.run(NacosGateway0927.class,args);
+        SpringApplication.run(NaCosGateway.class,args);
     }
 }

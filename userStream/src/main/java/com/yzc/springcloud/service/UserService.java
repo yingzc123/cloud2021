@@ -14,4 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface UserService extends IService<User> {
     void updateUser(String userId,String email);
     User checkIsExist(String userId);
+    int existNumber(String number);
+    void saveUser(User user);
+    String  returnNumber();
 }

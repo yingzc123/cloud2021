@@ -1,5 +1,7 @@
 package com.yzc.springcloud.service.imp;
 
+import cn.hutool.core.util.RandomUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yzc.springcloud.entity.User;
 import com.yzc.springcloud.dao.UserMapper;
 import com.yzc.springcloud.service.UserService;
@@ -34,6 +36,35 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return user;
     }
 
+    @Override
+    public int existNumber(String number)  {
+        int count = count(new QueryWrapper<User>().eq("user_number", number));
+        if(0 == count) {
+            throw new DiyException(500,"用户不存在");
+        }
+        return  count;
+    }
+
+    @Override
+    public void saveUser(User user) {
+        if(null == user ) {
+            throw new DiyException(500,"参数有误，注册失败");
+        }
+        user.setUserNumber(returnNumber());
+        user.setUserName("新用户");
+        save(user);
+    }
+
+    @Override
+    public String  returnNumber(){
+        while (true) {
+            String number = RandomUtil.randomString(10).toUpperCase();
+            int count = count(new QueryWrapper<User>().eq("user_number", number));
+            if(0 == count) {
+                return number;
+            }
+        }
+    }
 
     /**
      * 冒泡排序

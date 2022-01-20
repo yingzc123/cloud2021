@@ -1,15 +1,21 @@
 package com.yzc.springcloud.service.imp;
 
+import cn.hutool.core.collection.CollectionUtil;
+import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yzc.springcloud.entity.Role;
 import com.yzc.springcloud.dao.RoleMapper;
+import com.yzc.springcloud.entity.dto.RoleDto;
 import com.yzc.springcloud.entity.vo.RoleVO;
 import com.yzc.springcloud.service.RoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yzc.springcloud.utils.BeanKit;
+import com.yzc.springcloud.utils.EntityUtils;
+import com.yzc.springcloud.utils.ExportCvsUtil;
 import com.yzc.springcloud.utils.RedisUtil;
 import com.yzc.springcloud.utils.exceptionhandler.DiyException;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +23,9 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * <p>
@@ -59,13 +68,35 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public Page<RoleVO.RoleReturnVO> getList() {
-        QueryWrapper<Role> qw = new QueryWrapper<>();
-        Page<Role> page = page(new Page(1, 10), qw);
+    public Page<RoleVO.RoleReturnVO> getList(RoleDto.RoleQuery dto) {
+        Page<Role> page = page(new Page(dto.getCurrent(), dto.getSize()), dto.queryWrapper());
         Page<RoleVO.RoleReturnVO> voPage = new Page<>(page.getCurrent(), page.getSize());
         voPage.setRecords(BeanKit.copy(page.getRecords(), RoleVO.RoleReturnVO.class));
         return voPage;
     }
+
+    @Override
+    public  Page<Role>  getListRole(RoleDto.RoleQuery dto) {
+        return page(new Page(dto.getCurrent(), dto.getSize()), dto.queryWrapper());
+    }
+
+    @Override
+    public void export(RoleDto.RoleQuery dto, HttpServletResponse response)  {
+        List<Role> list = list(dto.queryWrapper());
+        try {
+            ExportCvsUtil.setExportCvs("身份列表", response);
+            if(CollectionUtil.isEmpty(list)) {
+                new DiyException(500,"导出列表为空");
+            }
+            EasyExcel.write(response.getOutputStream(), RoleVO.RoleReturnVO.class).sheet
+                    ("身份列表").doWrite(EntityUtils.transfer(list, RoleVO.RoleReturnVO.class));
+        }catch (Exception e) {
+            log.info(e.getMessage());
+            throw new DiyException(500,e.getMessage());
+        }
+
+    }
+
 
     @Override
     public void updateRole(Role role) {
@@ -89,6 +120,15 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         updateJson(jsonObject);
         log.info("role:{}", JSONObject.toJSON(role));
         log.info("jsonObject:{}", jsonObject);
+    }
+
+    @Override
+    public void reNewOrDisable(RoleDto.RoleReNewOrDisable dto) {
+        int count = count(new QueryWrapper<Role>().eq("role_id", dto.getRoleId()));
+        if(0 == count) {
+            new DiyException(500,"未找到该身份");
+        }
+        update(new UpdateWrapper<Role>().set("state",dto.getState()).eq("role_id",dto.getRoleId()));
     }
 
 }

@@ -1,6 +1,7 @@
 package com.yzc.springcloud.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yzc.springcloud.config.common.PageTitle;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -47,25 +49,52 @@ public class RoleController {
     }
 
     @PostMapping("/setRedis")
-    public ResultObject setRedis(@RequestBody @Valid RoleDto.RoleByRedis dto, BindingResult result) {
+    public ResultObject setRedis(@RequestBody @Valid RoleDto.RoleByRedis dto) {
         log.info("role/setRedis:{}", JSONObject.toJSON(dto));
-        if (result.hasErrors()) {
-            throw new DiyException(500, result.getAllErrors().get(0).getDefaultMessage());
-        }
         roleService.addRedisKey(dto.getKey(), dto.getValue());
         return new ResultObject(200, "添加成功");
     }
 
-    @GetMapping("/list")
-    public ResultObject getList() {
-        Page<RoleVO.RoleReturnVO> list = roleService.getList();
+    @PostMapping("/list")
+    public ResultObject getList(@RequestBody RoleDto.RoleQuery dto) {
+        log.info("role/list:{}", JSONObject.toJSON(dto));
+        Page<RoleVO.RoleReturnVO> list = roleService.getList(dto);
         return new ResultObject(200, new PageTitle<>(list, RoleVO.RoleReturnVO.class));
+    }
+
+    @PostMapping("/listRole")
+    public ResultObject getListRole(@RequestBody RoleDto.RoleQuery dto) {
+        log.info("role/listRole:{}", JSONObject.toJSON(dto));
+        return new ResultObject(200, roleService.getListRole(dto));
+    }
+
+    /**
+     * 身份导出
+     * @param dto
+     * @param response
+     */
+    @GetMapping("/export")
+    public void exportTmp(RoleDto.RoleQuery dto, HttpServletResponse response){
+            log.info("role/export:" + JSON.toJSONString(dto));
+        roleService.export(dto,response);
+
+    }
+
+
+    @PutMapping("/reNewOrDisable")
+    public ResultObject reNewOrDisable(@RequestBody @Valid RoleDto.RoleReNewOrDisable dto) {
+        log.info("role/reNewOrDisable:{}", JSONObject.toJSON(dto));
+        roleService.reNewOrDisable(dto);
+        return new ResultObject(200, "成功");
     }
 
     @GetMapping("/to")
     public void to() {
         messageProducer01.send("hahahahah");
     }
+
+
+
 
 
 }

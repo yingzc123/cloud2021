@@ -7,7 +7,15 @@ import com.yzc.springcloud.dao.UserMapper;
 import com.yzc.springcloud.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yzc.springcloud.utils.exceptionhandler.DiyException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * <p>
@@ -19,6 +27,66 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+    @Value("${upload.img}")
+    private String uploadPath;
+
+    /**
+     * * 类型判断
+     */
+    public void checkExcelType(MultipartFile file, String type) {
+        if (!file.getContentType().equals("application/octet-stream")
+                && !file.getContentType().equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) {
+            throw new DiyException(500,"类型错误");
+        }
+        uploadFile(file, type);
+    }
+
+    /**
+     * * 保存服务路径
+     */
+    public String uploadFile(MultipartFile file, String type) {
+        StringBuilder filePath = new StringBuilder(uploadPath);
+        String year = Calendar.getInstance().get(Calendar.YEAR) + "";
+        String monthWithDay = Calendar.getInstance().get(Calendar.MONTH) + 1 + "-" + Calendar.getInstance().get(Calendar.DATE);
+        filePath.append("/").append(type).append("/").append(year).append("/").append(monthWithDay).append("/");
+        File directory = new File("..");
+        File upFile = null;
+        StringBuilder path=new StringBuilder();
+        try {
+            upFile = new File(directory.getCanonicalPath() + filePath.toString());
+        } catch (IOException e) {
+            throw  new DiyException(500,e.getMessage());
+        }
+        if (!upFile.exists()) {
+            upFile.mkdirs();
+        }
+        if (!file.isEmpty()) {
+            String fileName = file.getOriginalFilename();
+            fileName = getUploadFileName(fileName);
+            try {
+                file.transferTo(new File(upFile + File.separator + fileName));
+                path.append(upFile.getPath()).append(fileName);
+            } catch (Exception e) {
+                throw  new DiyException(500,e.getMessage());
+            }
+        }
+        return path.toString();
+    }
+
+    /**
+     * * 随机名
+     */
+    private String getUploadFileName(String originalFilename) {
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMddhhmmss");
+        String dateStr = originalFilename.replace(originalFilename.substring(0, originalFilename.lastIndexOf(".")),
+                fmt.format(new Date()));
+        return dateStr;
+    }
+
+
+
+
 
     @Override
     public void updateUser(String userId, String email) {

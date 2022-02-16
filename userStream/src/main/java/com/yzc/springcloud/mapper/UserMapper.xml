@@ -14,11 +14,12 @@
         <result column="email" property="email" />
         <result column="balance" property="balance" />
         <result column="state" property="state" />
+        <result column="profile_path" property="profilePath" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        user_id, user_number, user_name, age, role_id, password, phone, email, balance, state
+        user_id, user_number, user_name, age, role_id, password, phone, email, balance, state,profile_path
     </sql>
 
 </mapper>

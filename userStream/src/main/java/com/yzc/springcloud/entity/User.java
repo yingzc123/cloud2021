@@ -69,5 +69,11 @@ public class User implements Serializable {
      */
     private Integer state;
 
+    /**
+     * 头像地址
+     */
+    private String profilePath;
+
+
 
 }

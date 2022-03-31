@@ -30,7 +30,55 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Value("${upload.img}")
     private String uploadPath;
+   @Resource
+    private RoleService roleService;
+    
+    
+    
+    
+    @Override
+    public void testUser() throws Exception {
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(2, 2, 1L,
+                TimeUnit.SECONDS,
+                new LinkedBlockingQueue<>(1),
+                Executors.defaultThreadFactory(),
+                new ThreadPoolExecutor.CallerRunsPolicy());
 
+
+        List<String> out=new ArrayList<>();
+
+
+        CompletableFuture<Void> two = CompletableFuture.runAsync(() -> {
+            List<Role> roleList = roleService.list();
+            if(!CollectionUtils.isEmpty(roleList)){
+                out.addAll(roleList.stream().map(Role::getState).collect(Collectors.toList()));
+                System.out.println("执行role");
+            }
+        }, executor);
+
+
+
+        List<String> sb=new ArrayList<>();
+        CompletableFuture<Void> one = CompletableFuture.runAsync(() -> {
+            List<User> userList = list();
+            sb.addAll(userList.stream().map(User::getEmail).collect(Collectors.toList()));
+            System.out.println("执行user");
+        }, executor);
+
+
+
+
+
+
+
+        CompletableFuture.allOf(one,two).get();
+
+
+        log.info("user:{}", JSON.toJSON(sb));
+        log.info("role:{}", JSON.toJSON(out));
+    }
+    
+    
     /**
      * * 类型判断
      */

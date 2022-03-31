@@ -16,7 +16,7 @@ public interface UserService extends IService<User> {
     void updateUser(String userId, String email);
 
     User checkIsExist(String userId);
-
+    void testUser() throws Exception;
     int existNumber(String number);
 
     void saveUser(User user);

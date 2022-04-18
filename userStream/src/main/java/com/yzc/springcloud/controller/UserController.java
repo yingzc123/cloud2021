@@ -43,7 +43,7 @@ public class UserController {
     @GetMapping
     public ResultObject getTest(){
         return new ResultObject(200, "操作成功",
-                userService.list(new QueryWrapper<User>().gt("age - role_id",0)));
+                userService.list());
     }
 
     @ResponseBody

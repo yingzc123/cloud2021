@@ -2,11 +2,14 @@ package com.yzc.springcloud.service.imp;
 
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yzc.springcloud.entity.Role;
 import com.yzc.springcloud.entity.User;
 import com.yzc.springcloud.dao.UserMapper;
+import com.yzc.springcloud.service.RoleService;
 import com.yzc.springcloud.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yzc.springcloud.utils.exceptionhandler.DiyException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,8 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -31,6 +34,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Value("${upload.img}")
     private String uploadPath;
 
+    @Autowired
+    private RoleService roleService;
+
     /**
      * * 类型判断
      */
@@ -40,6 +46,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new DiyException(500,"类型错误");
         }
         uploadFile(file, type);
+    }
+
+    /**
+     *  @author yzc
+     *  @since 2022-04-21
+     * @return
+     */
+    @Override
+    public List<User> getUserList() {
+        //演示作用就不写null判断了
+        List<User> userList = list();
+        Set<Integer> roleIds = userList.stream().map(User::getRoleId).collect(Collectors.toSet());
+        //只访问一次数据库
+        List<Role> roleList = roleService.list(new QueryWrapper<Role>().in("role_id", roleIds));
+        Map<Integer, Role> roleMap = roleList.stream().collect(Collectors.toMap(Role::getRoleId, role -> role));
+        userList.forEach(user -> {
+            if(roleMap.containsKey(user.getRoleId())) {
+                user.setRoleName(roleMap.get(user.getRoleId()).getRoleName());
+            }
+        });
+        return userList;
     }
 
     /**
@@ -93,6 +120,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = checkIsExist(userId);
         user.setEmail(email);
         updateById(user);
+        List<User> userList=new ArrayList<>();
+        updateBatchById(userList);
     }
 
     @Override

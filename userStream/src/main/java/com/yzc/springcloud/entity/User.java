@@ -2,6 +2,7 @@ package com.yzc.springcloud.entity;
 
 import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import lombok.Data;
@@ -73,6 +74,9 @@ public class User implements Serializable {
      * 头像地址
      */
     private String profilePath;
+
+    @TableField(exist = false)
+    private String roleName;
 
 
 

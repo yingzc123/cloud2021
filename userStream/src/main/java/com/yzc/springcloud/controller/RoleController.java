@@ -42,6 +42,12 @@ public class RoleController {
     private RoleService roleService;
 
 
+    @GetMapping("/pop")
+    public ResultObject pop(String key) {
+         roleService.popRedis(key);
+        return new ResultObject(200, "成功");
+    }
+
     @GetMapping("/getRedisObject")
     public ResultObject getRedisObject(String key) {
         Object o = roleService.testRedisUtils(key);

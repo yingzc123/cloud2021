@@ -37,4 +37,6 @@ public interface RoleService extends IService<Role> {
     void mainModer();
     void reNewOrDisable(RoleDto.RoleReNewOrDisable dto);
 
+    void popRedis(String key);
+
 }

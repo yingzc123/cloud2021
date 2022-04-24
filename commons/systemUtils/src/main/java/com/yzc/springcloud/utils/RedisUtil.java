@@ -17,6 +17,24 @@ public  final class RedisUtil {
     @Resource
     private RedisTemplate redisTemplate;
 
+    public  void lPush(String key,Object value){
+         redisTemplate.opsForList().leftPush(key, value);}
+
+        public  void rPush(String key,Object value){
+            redisTemplate.opsForList().rightPush(key, value);
+        }
+
+
+    public  void rPop(String key,Object value){
+        redisTemplate.opsForList().rightPop(key,10,TimeUnit.SECONDS);
+    }
+
+
+
+    public Object lPop(String key){
+        return   redisTemplate.opsForList().leftPop(key,10,TimeUnit.SECONDS);
+    }
+
     public Set<String> keys(String keys) {
         try {
             return redisTemplate.keys(keys);

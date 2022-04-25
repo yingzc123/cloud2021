@@ -2,6 +2,7 @@ package com.yzc.springcloud.service.imp;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -26,6 +27,11 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -129,6 +135,24 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             new DiyException(500,"未找到该身份");
         }
         update(new UpdateWrapper<Role>().set("state",dto.getState()).eq("role_id",dto.getRoleId()));
+    }
+
+    @Override
+    public void popRedis(String key) {
+        ThreadPoolExecutor pool = new ThreadPoolExecutor(5, 5, 2L, TimeUnit.SECONDS,
+                new LinkedBlockingQueue<>(3), Executors.defaultThreadFactory(), new ThreadPoolExecutor.CallerRunsPolicy());
+
+       /* for(int i=0 ;i<10;i++) {
+            redisUtil.rPush(key,i) ;
+        }*/
+       while (true) {
+            //redisUtil.lPush(key,UUID.randomUUID().toString().substring(0,4));
+           Object pop = redisUtil.rPop(key);
+            log.info("pop:{}", JSON.toJSONString(pop));
+        }
+
+       // log.info("pop:{}", JSON.toJSONString(pop));
+
     }
 
 }

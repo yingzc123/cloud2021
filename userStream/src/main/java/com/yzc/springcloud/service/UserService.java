@@ -4,6 +4,8 @@ import com.yzc.springcloud.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 /**
  * <p>
  * 服务类
@@ -26,4 +28,6 @@ public interface UserService extends IService<User> {
     String uploadFile(MultipartFile file, String type);
 
     void checkExcelType(MultipartFile file, String type);
+
+    List<User>  getUserList();
 }

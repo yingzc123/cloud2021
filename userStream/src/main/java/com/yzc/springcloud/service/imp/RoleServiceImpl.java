@@ -142,9 +142,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         ThreadPoolExecutor pool = new ThreadPoolExecutor(5, 5, 2L, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(3), Executors.defaultThreadFactory(), new ThreadPoolExecutor.CallerRunsPolicy());
 
-        while (true) {
+       /* for(int i=0 ;i<10;i++) {
+            redisUtil.rPush(key,i) ;
+        }*/
+       while (true) {
             //redisUtil.lPush(key,UUID.randomUUID().toString().substring(0,4));
-           Object pop = redisUtil.lPop(key);
+           Object pop = redisUtil.rPop(key);
             log.info("pop:{}", JSON.toJSONString(pop));
         }
 

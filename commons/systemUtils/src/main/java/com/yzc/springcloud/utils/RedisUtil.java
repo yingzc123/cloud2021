@@ -12,27 +12,27 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public  final class RedisUtil {
+public final class RedisUtil {
 
     @Resource
     private RedisTemplate redisTemplate;
 
-    public  void lPush(String key,Object value){
-         redisTemplate.opsForList().leftPush(key, value);}
+    public void lPush(String key, Object value) {
+        redisTemplate.opsForList().leftPush(key, value);
+    }
 
-        public  void rPush(String key,Object value){
-            redisTemplate.opsForList().rightPush(key, value);
-        }
-
-
-    public  void rPop(String key,Object value){
-        redisTemplate.opsForList().rightPop(key,10,TimeUnit.SECONDS);
+    public void rPush(String key, Object value) {
+        redisTemplate.opsForList().rightPush(key, value);
     }
 
 
+    public Object rPop(String key) {
+        return   redisTemplate.opsForList().rightPop(key, 10, TimeUnit.SECONDS);
+    }
 
-    public Object lPop(String key){
-        return   redisTemplate.opsForList().leftPop(key,10,TimeUnit.SECONDS);
+
+    public Object lPop(String key) {
+        return redisTemplate.opsForList().leftPop(key, 10, TimeUnit.SECONDS);
     }
 
     public Set<String> keys(String keys) {
@@ -111,7 +111,7 @@ public  final class RedisUtil {
      * @return 值
      */
     public Object get(String key) {
-       return  StrUtil.isEmpty(key) ? null : redisTemplate.opsForValue().get(key);
+        return StrUtil.isEmpty(key) ? null : redisTemplate.opsForValue().get(key);
     }
 
     /**
@@ -170,19 +170,19 @@ public  final class RedisUtil {
     /**
      * 计数器递增，加1，过期时间5分钟
      *
-     * @param key   键
-     * @param key   过期时间
+     * @param key 键
+     * @param key 过期时间
      * @return
      */
     public long register(String key) {
         Object vaule = get(key);
-        if(null == vaule) {
+        if (null == vaule) {
             boolean set = set(key, 1, 360);
-            if(!set) {
+            if (!set) {
                 throw new RuntimeException("缓存失败");
             }
             return 1;
-        }else {
+        } else {
             return redisTemplate.opsForValue().increment(key);
         }
 
